@@ -1,9 +1,9 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import AdminMenu from "../../components/AdminMenu/AdminMenu";
-import UserAdmin from "../../components/UserAdmin";
+import Change from "../../components/Change";
 import api from "../../services/api";
 
-const Users = () => {
+const ChangePage = () => {
 	const [path, setPath] = useState("");
 
 	useEffect(() => {
@@ -20,9 +20,9 @@ const Users = () => {
 	return (
 		<div className="dashboard">
 			<AdminMenu file_path={path} />
-			<UserAdmin />
+			<Change />
 		</div>
 	);
 };
 
-export default Users;
+export default ChangePage;

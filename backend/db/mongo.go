@@ -22,6 +22,7 @@ type Db struct {
 	Members          *mongo.Collection
 	Questions        *mongo.Collection
 	Question         *mongo.Collection
+	Contact          *mongo.Collection
 	Footer           *mongo.Collection
 }
 
@@ -48,7 +49,8 @@ func InitDB(url string) (*Db, error) {
 	member := db.Collection("member")
 	questions := db.Collection("questions")
 	question := db.Collection("question")
+	contact := db.Collection("contact")
 	footer := db.Collection("footer")
 
-	return &Db{Users: users, Data: data, Logo: logo, Menu: menu, Section: section, Card: card, Banner: banner, MultiSection: multiSection, MultiSectionItem: multiSectionItem, AccessLink: accessLink, Team: team, Members: member, Questions: questions, Question: question, Footer: footer}, nil
+	return &Db{Users: users, Data: data, Logo: logo, Menu: menu, Section: section, Card: card, Banner: banner, MultiSection: multiSection, MultiSectionItem: multiSectionItem, AccessLink: accessLink, Team: team, Members: member, Questions: questions, Question: question, Contact: contact, Footer: footer}, nil
 }

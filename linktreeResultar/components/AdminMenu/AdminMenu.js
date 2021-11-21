@@ -72,14 +72,14 @@ const Header = ({ file_path }) => {
 						<div className="logotext">
 							{menuCollapse ? (
 								<img
-									src={`http://steadd.com:8000${file_path}`}
+									src={`http://resultarmind.com.br:8000${file_path}`}
 									width="50px"
 									height="50px"
 									style={{ borderRadius: "50%" }}
 								/>
 							) : (
 								<img
-									src={`http://steadd.com:8000${file_path}`}
+									src={`http://resultarmind.com.br:8000${file_path}`}
 									width="100px"
 									height="100px"
 									style={{ borderRadius: "50%" }}
@@ -131,6 +131,15 @@ const Header = ({ file_path }) => {
 							>
 								Main page
 							</MenuItem>
+							<MenuItem
+								icon={<BsPersonFill />}
+								onClick={() => {
+									window.location.href = "/dashboard/change";
+								}}
+							>
+								Change
+							</MenuItem>
+
 							{isAdmin ? (
 								<MenuItem
 									icon={<BsPersonFill />}

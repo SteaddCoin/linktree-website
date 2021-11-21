@@ -9,7 +9,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-func getCards(c *gin.Context) {
+func getContact(c *gin.Context) {
 	username := c.Param("username")
 	user, err := GetUserBy("username", username, dbCollections.Users)
 	if err != nil {
@@ -17,8 +17,8 @@ func getCards(c *gin.Context) {
 		return
 	}
 
-	r := dbCollections.Card.FindOne(context.Background(), bson.M{"userid": user.ID})
-	var data = &entities.Cards{}
+	r := dbCollections.Contact.FindOne(context.Background(), bson.M{"userid": user.ID})
+	var data = &entities.Contact{}
 	if err := r.Decode(&data); err != nil {
 		c.JSON(404, gin.H{"message": "Not Found"})
 		return
@@ -27,21 +27,16 @@ func getCards(c *gin.Context) {
 	c.JSON(200, data)
 }
 
-func createUpdateCards(c *gin.Context) {
+func createUpdateContact(c *gin.Context) {
 	objectID, err := objectIDFromToken(c.GetHeader("jwt-token"))
 	if err != nil {
 		c.JSON(400, gin.H{"message": "Bad Request"})
 		return
 	}
 
-	var data = entities.Cards{}
+	var data = entities.Contact{}
 	err = c.BindJSON(&data)
 	if err != nil {
-		c.JSON(400, gin.H{"message": "Bad Request"})
-		return
-	}
-
-	if data.Title == "" || data.Content == "" {
 		c.JSON(400, gin.H{"message": "Bad Request"})
 		return
 	}
@@ -49,23 +44,18 @@ func createUpdateCards(c *gin.Context) {
 	data.UserID = objectID
 	ctx := context.Background()
 
-	s, err := checkExists(ctx, objectID, dbCollections.Card)
+	s, err := checkExists(ctx, objectID, dbCollections.Contact)
 	if err != nil {
 		c.JSON(500, gin.H{"message": "Internal Server Error"})
 		return
 	}
 
-	// Generate new id for every card
-	for index, _ := range data.Cards {
-		data.Cards[index].ID = primitive.NewObjectID()
-	}
-
-	var old = entities.Cards{}
+	var old = entities.Card{}
 	err = s.Decode(&old)
 	if err != nil {
 		data.ID = primitive.NewObjectID()
 
-		_, err = dbCollections.Card.InsertOne(ctx, data)
+		_, err = dbCollections.Contact.InsertOne(ctx, data)
 		if err != nil {
 			c.JSON(400, gin.H{"message": "Bad Request"})
 			return
@@ -75,11 +65,12 @@ func createUpdateCards(c *gin.Context) {
 		return
 	}
 
-	_, err = dbCollections.Card.UpdateOne(ctx, bson.M{"_id": bson.M{"$eq": old.ID}, "userid": objectID}, bson.M{"$set": bson.M{"title": data.Title, "content": data.Content, "cards": data.Cards}})
+	_, err = dbCollections.Contact.UpdateOne(ctx, bson.M{"_id": bson.M{"$eq": old.ID}, "userid": objectID}, bson.M{"$set": bson.M{"number": data.Number}})
 	if err != nil {
 		c.JSON(400, gin.H{"message": "Bad Request"})
 		return
 	}
+
 	c.JSON(201, gin.H{})
 	return
 }

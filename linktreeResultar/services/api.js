@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-	baseURL: "http://steadd.com:8000",
+	baseURL: "http://resultarmind.com.br:8000",
 });
 
 export const catchErr = (e, fofH) => {
@@ -13,7 +13,5 @@ export const catchErr = (e, fofH) => {
 		window.location.href = "/admin";
 	}
 };
-
-export const contactNumber = "";
 
 export default api;

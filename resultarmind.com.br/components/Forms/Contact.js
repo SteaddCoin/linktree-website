@@ -20,7 +20,6 @@ import { withTranslation } from "~/i18n";
 import { useText } from "~/theme/common";
 import Checkbox from "./Checkbox";
 import useStyles from "./form-style";
-import { contactNumber } from "../../services/api";
 
 function Contact(props) {
 	const classes = useStyles();
@@ -35,6 +34,21 @@ function Contact(props) {
 		company: "",
 		message: "",
 	});
+	const [contact, setContact] = useState({});
+
+	useEffect(() => {
+		api.get(
+			"read-contact/" + window.location.host.split(".")[0].split(":")[0]
+		)
+			.then((r) => {
+				setContact(r.data);
+			})
+			.catch((e) => {
+				if (e.response?.status === 404) {
+					setContact({ number: "" });
+				}
+			});
+	}, []);
 
 	useEffect(() => {
 		ValidatorForm.addValidationRule("isTruthy", (value) => value);
@@ -62,7 +76,7 @@ function Contact(props) {
 
 	const handleContact = () => {
 		var url =
-			`https://wa.me/${contactNumber}?text=` +
+			`https://wa.me/${contact.number}?text=` +
 			"Nome: " +
 			values.name +
 			"%0a" +

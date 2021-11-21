@@ -87,7 +87,7 @@ function Banner(props) {
 			rel: 0,
 			showinfo: 1,
 			mute: 0,
-			origin: "https://www.youtube.com/watch?v=MN9bw9B3KWA",
+			origin: "https://resultarmind.com.br:3002",
 		},
 	};
 

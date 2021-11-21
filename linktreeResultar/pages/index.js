@@ -1,5 +1,6 @@
 import Head from "next/head";
 import styles from "../styles/Home.module.css";
+import { useEffect, useState } from "react";
 import useSWR from "swr";
 import List from "../components/List/List.js";
 import Header from "../components/Header/Header.js";
@@ -10,11 +11,17 @@ import api, { catchErr } from "../services/api";
 const fetcher = (url) => api.get(url).then((r) => r.data);
 
 function Home(props) {
-	const { data, error } = useSWR("read-linktree/" + props.user, fetcher);
-	if (error) {
-		return <div>Falha ao mostrar o resultado!</div>;
+	const [data, setData] = useState({});
+
+	useEffect(() => {
+		api.get("read-linktree/" + props.user)
+			.then((r) => setData(r.data))
+			.catch((e) => e.toJSON());
+	}, []);
+
+	if (Object.keys(data).length == 0) {
+		return <h1>Loading ...</h1>;
 	}
-	if (!data) return <div>Loading...</div>;
 
 	return (
 		<div className={styles.container}>

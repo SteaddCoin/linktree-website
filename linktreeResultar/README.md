@@ -14,7 +14,7 @@ Luego de tener las dependencias instaladas
 
 El proyecto estara corriendo en:
 
-    localhost:3000
+    resultarmind.com.br:3000
 
 Para ingresar sus propios links modificar el archivo `data.js`
 

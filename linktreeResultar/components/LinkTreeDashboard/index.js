@@ -8,6 +8,7 @@ function LinkTreeDashboard() {
 	const [titleUrl, setTitleUrl] = useState("");
 	const [content, setContent] = useState("");
 	const [successMsg, setSuccessMsg] = useState("");
+	const [contact, setContact] = useState({});
 
 	const requestNewData = () => {
 		api.get("/read-linktree/" + localStorage.getItem("username"))
@@ -23,6 +24,16 @@ function LinkTreeDashboard() {
 
 	useEffect(() => {
 		requestNewData();
+	}, []);
+
+	useEffect(() => {
+		api.get("read-contact/" + localStorage.getItem("username"))
+			.then((r) => setContact(r.data))
+			.catch((e) => {
+				if (e.response?.status == 404) {
+					setContact({ id: "", user_id: "", number: "" });
+				}
+			});
 	}, []);
 
 	useEffect(() => {
@@ -126,6 +137,12 @@ function LinkTreeDashboard() {
 					}
 				});
 		}
+
+		api.post("create-contact", contact, {
+			headers: {
+				"jwt-token": `JWT ${localStorage.getItem("token")}`,
+			},
+		});
 	};
 
 	if (Object.keys(data).length === 0 && links.length == 0 && content == "") {
@@ -199,6 +216,20 @@ function LinkTreeDashboard() {
 							</div>
 						);
 					})}
+				</div>
+
+				<div>
+					<input
+						type="text"
+						placeholder={"Phone number"}
+						value={contact.number}
+						onChange={(e) =>
+							setContact((prev) => ({
+								...prev,
+								number: e.target.value,
+							}))
+						}
+					/>
 				</div>
 				<input type={"submit"} />
 			</form>

@@ -11,7 +11,6 @@ function MultiSection() {
 				setMainSection(r.data);
 			})
 			.catch((e) => {
-				console.log(e.response);
 				catchErr(e, () => setMainSection({ title: "", content: "" }));
 			});
 	}, []);
@@ -21,7 +20,6 @@ function MultiSection() {
 			.then((r) => {
 				setMainSectionItem(
 					r.data.map((i) => {
-						console.log(i.image_path);
 						i.image = "";
 						i.created = true;
 						return i;

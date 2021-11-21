@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "axios": "^0.21.1",
-    "next": "^11.1.2",
+    "next": "^11.0.1",
     "react": "17.0.1",
     "react-audio-player": "^0.17.0",
     "react-dom": "17.0.1",

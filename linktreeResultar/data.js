@@ -1,17 +1,17 @@
 export const links = [{
     id: '1',
     name: 'link 1',
-    url: 'https://localhost:3000',
+    url: 'https://resultarmind.com.br:3000',
 },
 {
     id: '2',
     name: 'website',
-    url: 'https://localhost:3002',
+    url: 'https://resultarmind.com.br:3002',
 },
 {
     id: '3',
    name: 'Sistema GR',
-   url: 'https://localhost:5000',
+   url: 'https://resultarmind.com.br:5000',
 },
 
 {

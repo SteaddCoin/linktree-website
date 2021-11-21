@@ -3,6 +3,7 @@ import api, { catchErr } from "../../services/api";
 
 const UserAdmin = () => {
 	const [users, setUsers] = useState([]);
+	const [password, setPassword] = useState({});
 
 	const loadUsers = () => {
 		api.get("list-users", {
@@ -40,6 +41,24 @@ const UserAdmin = () => {
 		);
 
 		loadUsers();
+	};
+
+	const changePassword = (e, username) => {
+		e.preventDefault();
+
+		api.post(
+			"change-password/" + username,
+			{ password: password[username] },
+			{
+				headers: {
+					"jwt-token": `JWT ${localStorage.getItem("token")}`,
+				},
+			}
+		);
+
+		let a = {};
+		a[username] = "";
+		setPassword(a);
 	};
 
 	const changePermissions = (user) => {
@@ -80,6 +99,22 @@ const UserAdmin = () => {
 					<tr key={i.username}>
 						<td className="user-th">{i.username}</td>
 						<td className="user-th">{i.email}</td>
+						<td className="user-th">
+							<input
+								type={"text"}
+								placeholder={"Reset Password"}
+								value={password[i.username]}
+								onChange={(e) => {
+									let a = password;
+									a[i.username] = e.target.value;
+									setPassword(a);
+								}}
+							/>
+							<input
+								type={"submit"}
+								onClick={(e) => changePassword(e, i.username)}
+							/>
+						</td>
 						<td className="user-th">
 							<button
 								onClick={() => changePermissions(i)}

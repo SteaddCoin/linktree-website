@@ -1,10 +1,21 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import api from "../../services/api";
 import AdminMenu from "../../components/AdminMenu/AdminMenu";
 
-function Logo(props) {
+function Logo() {
 	const [img, setImg] = useState(null);
-	const [path, setPath] = useState(props.file_path);
+	const [path, setPath] = useState("");
+
+	useEffect(() => {
+		let user = localStorage.getItem("username");
+		api.get("/read-logo/" + user)
+			.then((r) => {
+				setPath(r.data.file_path);
+			})
+			.catch((e) => {
+				if (e.response.status == 400) return undefined;
+			});
+	}, []);
 
 	const reloadImg = () => {
 		api.get("read-logo/" + localStorage.getItem("username")).then((r) =>
@@ -24,7 +35,7 @@ function Logo(props) {
 				},
 			})
 			.catch((e) => {
-				if (e.response.status == 401) {
+				if (e.response?.status == 401) {
 					window.location.href = "/admin";
 				}
 			});
@@ -40,7 +51,7 @@ function Logo(props) {
 				reloadImg();
 			})
 			.catch((e) => {
-				if (e.response.status == 401) {
+				if (e.response?.status == 401) {
 					window.location.href = "/admin";
 				}
 			});
@@ -51,7 +62,7 @@ function Logo(props) {
 			<AdminMenu file_path={path} />
 			<div>
 				<div>
-					<img src={`${"http://steadd.com:8000"}${path}`} />
+					<img src={`${"http://resultarmind.com.br:8000"}${path}`} />
 				</div>
 				<form onSubmit={handleSubmit}>
 					<input
@@ -64,19 +75,5 @@ function Logo(props) {
 		</div>
 	);
 }
-
-Logo.getInitialProps = async ({ req }) => {
-	let file_path = undefined;
-	let user = req.headers.host.split(".")[0].split(":")[0];
-	file_path = await api
-		.get("/read-logo/" + user)
-		.then((r) => {
-			return r.data.file_path;
-		})
-		.catch((e) => {
-			if (e.response.status == 400) return undefined;
-		});
-	return { file_path: file_path };
-};
 
 export default Logo;
